@@ -1,0 +1,59 @@
+---
+# file: roles/workstation/tasks/main.yml
+
+- name: Install necessary packages
+  pacman:
+    name: '{{ item }}'
+    state: present
+  when:
+    - ansible_os_family == 'Archlinux'
+  with_items:
+    - alsa-utils
+    - dzen2
+    - faenza-icon-theme
+    - gmrun
+    - gnome-themes-standard
+    - herbstluftwm
+    - mpd
+    - mpv
+    - ncmpcpp
+    - neovim
+    - pcmanfm
+    - pulseaudio
+    - pulseaudio-alsa
+    - pavucontrol
+    - python-neovim
+    - scrot
+    - setroot
+    - stow
+    - tmux
+    - ttf-liberation
+    - xorg-server
+    - xorg-server-utils
+    - xorg-xinit
+    - youtube-dl
+    - zsh
+
+- name: Add user account
+  user:
+    name: '{{ installuser }}'
+    shell: /bin/zsh
+    groups: wheel
+    append: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+
+- name: Checkout dotfiles
+  git:
+    url: '{{ dotfilesrepo }}'
+    dest: ~/dotfiles
+  become: yes
+  become_user: '{{ installuser }}'
+
+- name: Stow dotfiles
+  shell: |
+    cd ~/dotfiles
+    stow *
+  become: yes
+  become_user: '{{ installuser }}'
+

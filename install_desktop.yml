@@ -1,6 +1,7 @@
 ---
-- hosts: desktop
-  remote_user: filip
+- hosts: '{{ target }}'
+  remote_user: '{{ installuser }}'
   become: yes
   roles:
+    - workstation
     - docker
