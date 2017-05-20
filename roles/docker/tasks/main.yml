@@ -1,0 +1,102 @@
+---
+# file: roles/server/tasks/main.yml
+
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Install apt-transport-https
+  apt:
+    name: apt-transport-https
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Install curl
+  apt:
+    name: curl
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Install ca-certificates
+  apt:
+    name: ca-certificates
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Install gnupg2
+  apt:
+    name: gnupg2
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Install software-properties-common
+  apt:
+    name: software-properties-common
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Import Docker's official GPG key
+  apt_key:
+    url: "https://download.docker.com/linux/debian/gpg"
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Add Docker's apt-repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    update_cache: yes
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Install pip
+  apt:
+    name: python-pip
+    state: present
+  when:
+    - ansible_os_family == "Debian"
+
+- name: Install docker-compose
+  pip:
+    name: docker-compose
+    state: present
+    extra_args: --user
+  when:
+    - ansible_os_family == "Debian"
+  ignore_errors: yes
+
+- name: Install Docker (archlinux)
+  pacman:
+    name: docker
+    state: present
+  when:
+    - ansible_os_family == "Archlinux"
+
+- name: Install docker-compose (archlinux)
+  pacman:
+    name: docker-compose
+    state: present
+  when:
+    - ansible_os_family == "Archlinux"
+
+- name: Add installuser to docker group
+  user:
+    name: "{{ installuser }}"
+    groups: docker
+    append: yes
+

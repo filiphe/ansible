@@ -1,0 +1,6 @@
+---
+- hosts: server
+  remote_user: filip
+  become: yes
+  roles:
+    - docker
