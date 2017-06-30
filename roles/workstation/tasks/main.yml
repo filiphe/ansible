@@ -15,9 +15,11 @@
     - gnome-themes-standard
     - herbstluftwm
     - mpd
+    - mpdas
     - mpv
     - ncmpcpp
     - neovim
+    - nerd-fonts-git
     - pcmanfm
     - pulseaudio
     - pulseaudio-alsa
@@ -40,7 +42,7 @@
     shell: /bin/zsh
     groups: wheel
     append: yes
-    ssh_key_bits: 2048
+    ssh_key_bits: 4096
     ssh_key_file: .ssh/id_rsa
 
 - name: Checkout dotfiles
